@@ -63,16 +63,6 @@ namespace Maps.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap ship2 {
-            get {
-                object obj = ResourceManager.GetObject("ship2", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap slovensko_map {
             get {
                 object obj = ResourceManager.GetObject("slovensko_map", resourceCulture);
@@ -91,7 +81,19 @@ namespace Maps.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bratislavský kraj;86;116;185
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap slovensko_maskrivers {
+            get {
+                object obj = ResourceManager.GetObject("slovensko_maskrivers", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Region
+        ///Slovensko - kraje
+        ///Bratislavský kraj;86;116;185
         ///Trnavský kraj;57;181;74
         ///Nitriansky kraj;237;0;140
         ///Trenčiansky kraj;0;74;128
@@ -103,6 +105,17 @@ namespace Maps.Properties {
         internal static string slovensko_regions {
             get {
                 return ResourceManager.GetString("slovensko_regions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Morava;136;0;21
+        ///Dunaj;34;177;76
+        ///Váh;255;201;14.
+        /// </summary>
+        internal static string slovensko_rivers {
+            get {
+                return ResourceManager.GetString("slovensko_rivers", resourceCulture);
             }
         }
     }

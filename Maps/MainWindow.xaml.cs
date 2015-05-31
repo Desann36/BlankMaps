@@ -23,7 +23,7 @@ namespace Maps
     {
         public MainWindow()
         {
-
+            InitializeComponent();
         }
 
         private void image1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -33,19 +33,6 @@ namespace Maps
             Point point = e.GetPosition(Image);
             System.Drawing.Point p = new System.Drawing.Point((int) point.X, (int) point.Y);
             viewModel.MapClicked(p);
-        }
-
-        private void image1_MouseMove(object sender, MouseEventArgs e)
-        {
-            var Image = sender as Image;
-            this.Coordinates.Text = e.GetPosition(Image).ToString();
-        }
-
-        private void SizeCombobox_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            var comboBox = sender as ComboBox;
-            if (Key.Enter == e.Key)
-                comboBox.RaiseEvent(new RoutedEventArgs(LostFocusEvent, comboBox));
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

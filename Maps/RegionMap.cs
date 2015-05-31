@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Maps
 {
-    class RegionMap : Map
+    public class RegionMap : Map
     {
         public RegionMap(string name, Bitmap map, Bitmap mask, List<Region> regions)
             :base(name, map, mask, regions)
@@ -16,10 +16,8 @@ namespace Maps
 
         }
 
-        public bool? RegionClick(double nx, double ny, Color regionColor)
+        public bool? RegionClick(int x, int y, Color regionColor)
         {
-            int x = (int) (nx * (double) this.Mask.Width);
-            int y = (int) (ny * (double) this.Mask.Height);
             Color pointColorx = Mask.GetPixel(x, y);
             int pointColor = pointColorx.ToArgb();
             int col = regionColor.ToArgb();

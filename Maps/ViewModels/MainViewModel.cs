@@ -16,13 +16,15 @@ namespace Maps.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private bool GameStarted = false;
-
-        private List<Region> ItemsToFind;
-
-        private RegionMap actualMap;
+        public MainViewModel()
+        {
+            var map1 = new RegionMap("Slovensko - kraje", Properties.Resources.slovensko_map,
+                Properties.Resources.slovensko_mask, this.LoadRegions(Properties.Resources.slovensko_regions));
+            var map2 = new DistanceMap("Slovensko - rieky", Properties.Resources.slovensko_map,
+                Properties.Resources.slovensko_maskrivers, this.LoadRegions(Properties.Resources.slovensko_rivers));
+            this.MapsCollection = new ObservableCollection<Map>() { map1, map2 };
+            this.SelectedMap = this.MapsCollection.ElementAt(0);
+        }
 
         private List<Region> LoadRegions(string resource_data)
         {
@@ -35,8 +37,118 @@ namespace Maps.ViewModels
                 Color col = Color.FromArgb(255, Convert.ToInt32(item[1]), Convert.ToInt32(item[2]), Convert.ToInt32(item[3]));
                 return new Region() { Name = item[0], Color = col };
             }).ToList();
-
             return items;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private bool GameStarted = false;
+
+        private Map selectedMap;
+        public Map SelectedMap
+        {
+            get
+            {
+                return this.selectedMap;
+            }
+            set
+            {
+                this.selectedMap = value;
+                RaisePropertyChanged("SelectedMap");
+
+                GameStarted = false;
+                this.Map = WPFBitmapConverter.ConvertBitmap(SelectedMap.MapToDraw);
+                this.width = SelectedMap.MapToDraw.Width;
+                this.height = SelectedMap.MapToDraw.Height;
+                this.NumberOfFoundRegions = 0;
+                this.NumberOfRegions = 0;
+                this.NumberOfRegions = this.SelectedMap.Regions.Count;
+                this.Information = new ObservableCollection<Scoring>();
+                this.RegionToFind = null;
+
+                if (this.SelectedMap is DistanceMap)
+                {
+                    this.InformationTitle = "Distances:";
+                }
+
+                if (this.SelectedMap is RegionMap)
+                {
+                    this.InformationTitle = "Marked:";
+                }
+
+            }
+        }
+
+        private BitmapSource map;
+        public BitmapSource Map
+        {
+            get
+            {
+                return map;
+            }
+            set
+            {
+                map = value;
+                RaisePropertyChanged("Map");
+            }
+        }
+
+        private List<Region> ItemsToFind;
+
+        private Region regionToFind;
+        public Region RegionToFind
+        {
+            get
+            {
+                return regionToFind;
+            }
+            set
+            {
+                regionToFind = value;
+                RaisePropertyChanged("RegionToFind");
+            }
+        }
+
+        private int numberOfRegions;
+        public int NumberOfRegions
+        {
+            get
+            {
+                return numberOfRegions;
+            }
+            set
+            {
+                numberOfRegions = value;
+                RaisePropertyChanged("NumberOfRegions");
+            }
+        }
+
+        private int numberOfFoundRegions;
+        public int NumberOfFoundRegions
+        {
+            get
+            {
+                return numberOfFoundRegions;
+            }
+            set
+            {
+                numberOfFoundRegions = value;
+                RaisePropertyChanged("NumberOfFoundRegions");
+            }
+        }
+
+        private ObservableCollection<Map> maps = new ObservableCollection<Map>();
+        public ObservableCollection<Map> MapsCollection
+        {
+            get
+            {
+                return this.maps;
+            }
+            set
+            {
+                this.maps = value;
+                RaisePropertyChanged("Maps");
+            }
         }
 
         private ObservableCollection<string> items = new ObservableCollection<string>()
@@ -114,7 +226,7 @@ namespace Maps.ViewModels
             }
         }
 
-        private int width = Properties.Resources.slovensko_map.Width;
+        private int width;
         public int Width
         {
             get
@@ -124,7 +236,7 @@ namespace Maps.ViewModels
             }
         }
 
-        private int height = Properties.Resources.slovensko_map.Height;
+        private int height;
         public int Height
         {
             get
@@ -134,38 +246,37 @@ namespace Maps.ViewModels
             }
         }
 
-        private BitmapSource map = WPFBitmapConverter.ConvertBitmap(Properties.Resources.slovensko_map);
-        public BitmapSource Map
+        private string informationTitle;
+        public String InformationTitle
         {
             get
             {
-                return map;
+                return informationTitle;
             }
-            set
+            private set
             {
-                map = value;
-                RaisePropertyChanged("Map");
+                this.informationTitle = value;
+                RaisePropertyChanged("InformationTitle");
             }
         }
 
-        private string regionToFind;
-        public string RegionToFind
+        private ObservableCollection<Scoring> information;
+        public ObservableCollection<Scoring> Information
         {
             get
             {
-                return regionToFind;
+                return information;
             }
-            set
+            private set
             {
-                regionToFind = value;
-                RaisePropertyChanged("RegionToFind");
+                this.information = value;
+                RaisePropertyChanged("Information");
             }
         }
 
         public void MapClicked(System.Drawing.Point p)
         {
-
-            if (this.actualMap == null || this.ItemsToFind == null || GameStarted == false)
+            if (this.SelectedMap == null || this.ItemsToFind == null || GameStarted == false)
             {
                 return;
             }
@@ -176,37 +287,53 @@ namespace Maps.ViewModels
             int x = (int) (nx * this.Map.Width);
             int y = (int) (ny * this.Map.Height);
 
-            Region wanted = ItemsToFind.First();
-            Console.WriteLine(wanted);
             Bitmap bmp = WPFBitmapConverter.BitmapFromSource(this.Map);
-            bool? correctness = this.actualMap.RegionClick(nx, ny, wanted.Color);
 
-            if (correctness == true)
+            if (this.SelectedMap is RegionMap)
             {
-                this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.FloodFill(bmp, new System.Drawing.Point(x, y), Color.Green));
-            }
-            else if (correctness == false)
-            {
-                System.Drawing.Point point = this.actualMap.pointInRegion(wanted.Color);
-                this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.FloodFill(bmp, point, Color.Red));
-            }
-            else if (correctness == null)
-            {
-                return;
+                RegionMap rm = this.SelectedMap as RegionMap;
+                bool? correctness = rm.RegionClick(x, y, this.RegionToFind.Color);
+
+                if (correctness == true)
+                {
+                    this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Green));
+                    this.Information.Add(new Scoring() { Name = this.RegionToFind.Name, Score = "✔" });
+                }
+                else if (correctness == false)
+                {
+                    System.Drawing.Point point = this.SelectedMap.pointInRegion(this.RegionToFind.Color);
+                    this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Red));
+                    this.Information.Add(new Scoring() { Name = this.RegionToFind.Name, Score = "×" });
+                }
+                else if (correctness == null)
+                {
+                    return;
+                }
             }
 
-            this.ItemsToFind.RemoveAt(0);
+            if (this.SelectedMap is DistanceMap)
+            {
+                DistanceMap dm = SelectedMap as DistanceMap;
+                double dist = MapOperations.NearestPixel(this.SelectedMap.Mask, new System.Drawing.Point(x, y), this.RegionToFind.Color);
+                this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Green));
+                this.Information.Add(new Scoring() { Name = this.RegionToFind.Name, Score = string.Format("{0:N2}km", dist) });
+            }
+
+            RaisePropertyChanged("Information");
+            this.ItemsToFind.Remove(this.RegionToFind);
             if (!ItemsToFind.Any())
             {
                 this.ItemsToFind = null;
                 this.GameStarted = false;
-                this.RegionToFind = "";
+                this.RegionToFind = null;
             }
             else
             {
-                this.RegionToFind = ItemsToFind.First().Name;
+                Random rnd = new Random();
+                int regionIndex = rnd.Next(0, this.ItemsToFind.Count);
+                this.RegionToFind = ItemsToFind.ElementAt(regionIndex);
+                this.NumberOfFoundRegions += 1;
             }
-
         }
 
         public ICommand StartNewMap
@@ -219,14 +346,40 @@ namespace Maps.ViewModels
 
         private void StartMap()
         {
-            this.actualMap = new RegionMap("Slovakia", Properties.Resources.slovensko_map, 
-                Properties.Resources.slovensko_mask, this.LoadRegions(Properties.Resources.slovensko_regions));
-            this.Map = WPFBitmapConverter.ConvertBitmap(actualMap.MapToDraw);
-            this.width = actualMap.MapToDraw.Width;
-            this.height = actualMap.MapToDraw.Height;
-            this.ItemsToFind = actualMap.Regions;
             GameStarted = true;
-            this.RegionToFind = ItemsToFind.First().Name;
+            this.Map = WPFBitmapConverter.ConvertBitmap(SelectedMap.MapToDraw);
+            this.width = SelectedMap.MapToDraw.Width;
+            this.height = SelectedMap.MapToDraw.Height;
+            this.ItemsToFind = new List<Region>(SelectedMap.Regions);
+
+            Random rnd = new Random();
+            int regionIndex = rnd.Next(0, this.ItemsToFind.Count);
+            this.RegionToFind = ItemsToFind.ElementAt(regionIndex);
+
+            this.NumberOfFoundRegions = 1;
+            this.Information = new ObservableCollection<Scoring>();
+        }
+
+        public ICommand NewMapCommand
+        {
+            get
+            {
+                return new RelayCommand(() => this.NewMap());
+            }
+        }
+
+        private void NewMap()
+        {
+            LoadWindow lw = new LoadWindow();
+
+            if (lw.ShowDialog() == true)
+            {
+                if (lw.NewMap != null)
+                {
+                    this.MapsCollection.Add(lw.NewMap);
+                    this.SelectedMap = lw.NewMap;
+                }
+            }
         }
 
         public ICommand ExitCommand
@@ -237,38 +390,23 @@ namespace Maps.ViewModels
             }
         }
 
-        public ICommand OpenCommand
-        {
-            get
-            {
-                return new RelayCommand(() => this.OpenFile());
-            }
-        }
-
-        public void OpenFile()
-        {
-            var ofd = new OpenFileDialog()
-            {
-                Filter = "ZIP files|*.zip"
-            };
-
-            if (ofd.ShowDialog() == true)
-            {
-                this.Parse();
-            }
-        }
-
-        private void Parse()
-        {
-            
-        }
-
         protected void RaisePropertyChanged(string propertyName)
         {
             if (this.PropertyChanged != null)
             {
                 this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+    }
+
+    public class Scoring
+    {
+        public string Name { get; set; }
+        public string Score { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("{0}: {1}", this.Name, this.Score);
         }
     }
 }

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:Maps.ViewModels"
         xmlns:local="clr-namespace:Maps"
-        Title="MainWindow" Height="550" Width="824">
+        Title="BlankMaps" Height="550" Width="824">
     <Grid Focusable="True" MouseLeftButtonDown="Grid_MouseLeftButtonDown">
         <Grid.DataContext>
             <vm:MainViewModel />
@@ -13,7 +13,7 @@
                 <MenuItem.Header>
                     <TextBlock Text="File" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </MenuItem.Header>
-                <MenuItem Header="_Open" Command="{Binding OpenCommand}"/>
+                <MenuItem Header="_New" Command="{Binding NewMapCommand}"/>
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
@@ -34,7 +34,7 @@
 
                     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                         <Image Margin="0" Name="image1"  Grid.Column="0" Grid.Row="0" Source="{Binding Map}" Width="{Binding Width, Mode=OneWay}" 
-                               Height="{Binding Height, Mode=OneWay}" MouseLeftButtonUp="image1_MouseLeftButtonUp" MouseMove="image1_MouseMove"/>
+                               Height="{Binding Height, Mode=OneWay}" MouseLeftButtonUp="image1_MouseLeftButtonUp"/>
                     </ScrollViewer>
                 </Grid>
             </Border>
@@ -48,24 +48,71 @@
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*" MinHeight="22"/>
+                    <RowDefinition Height="52*" MinHeight="22"/>
                     <RowDefinition Height="2" />
-                    <RowDefinition Height="1*" MinHeight="32"/>
-                    <RowDefinition Height="10*"/>
+                    <RowDefinition Height="34*" MinHeight="32"/>
+                    <RowDefinition Height="104*"/>
+                    <RowDefinition Height="52*"/>
+                    <RowDefinition Height="224*"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
-                <ComboBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom"/>
-                <Button Content="Start" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="32" Command="{Binding StartNewMap}"/>
-                <ComboBox Name="SizeCombobox" SelectedItem="{Binding Size}" Grid.Column="1" Grid.Row="3" 
+                <ComboBox SelectedItem="{Binding SelectedMap}" Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" ItemsSource="{Binding MapsCollection}"  DisplayMemberPath="Name"/>
+                <Button Content="Start" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" Height="32" Command="{Binding StartNewMap}" Margin="0,1"/>
+                <ComboBox Name="SizeCombobox" SelectedItem="{Binding Size}" Grid.Column="1" Grid.Row="5" 
                           HorizontalAlignment="Left" VerticalAlignment="Bottom" IsEditable="True" 
                           Height="20"  Width="64" ItemsSource="{Binding Items}"
-                          Text="{Binding NewItem, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" GotFocus="SizeCombobox_GotFocus"/>
-                <Label Content="Find:" Grid.Column="1" Margin="0,40,0,0" Grid.Row="3" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
-                <Label Content="{Binding RegionToFind}" Grid.Column="1" Margin="0,81,0,0" Grid.Row="3" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+                          Text="{Binding NewItem, UpdateSourceTrigger=LostFocus, Mode=TwoWay}" GotFocus="SizeCombobox_GotFocus" Grid.RowSpan="2"/>
+                <Label Content="Find:" Grid.Column="1" Margin="1,37,0,0" Grid.Row="3" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold"/>
+                <TextBlock Grid.Column="1" Margin="1,79,0,0" Grid.Row="3" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding RegionToFind}" FontWeight="Bold" FontSize="18" Foreground="#FFE40E0E"/>
+                <Label Grid.Column="1" Margin="1,0,0,0" Grid.Row="4" VerticalAlignment="Top" Background="Transparent" HorizontalContentAlignment="Center" FontSize="22" FontWeight="Bold" Foreground="#FF7A7A7A" Height="41" RenderTransformOrigin="0.5,0.5">
+                    <Label.Content>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}/{1}">
+                                    <Binding Path="NumberOfFoundRegions" />
+                                    <Binding Path="NumberOfRegions" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
+                <Label Content="{Binding InformationTitle}" Grid.Column="1" Margin="1,0,0,0" Grid.Row="5" VerticalAlignment="Top" HorizontalContentAlignment="Center" FontSize="16" FontWeight="Bold" Height="30"/>
+                <Border BorderBrush="#FFA4A4A4" BorderThickness="1" Grid.Column="1" Height="1" Margin="1,68,0,0" Grid.Row="3" VerticalAlignment="Top"/>
+                <Border BorderBrush="#FFA4A4A4" BorderThickness="1" Grid.Column="1" Height="1" Margin="0,32,0,0" Grid.Row="5" VerticalAlignment="Top"/>
+                <Grid Grid.Column="1" Margin="1,47,0,35" Grid.Row="5">
+                    <ListView Name="RecordListView" ItemsSource="{Binding Information}" Background="WhiteSmoke" BorderBrush="WhiteSmoke" Height="Auto">
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </Style>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            </Style>
+                            <DataTemplate x:Key="ScoreTemplate">
+                                <TextBlock TextAlignment="Right" HorizontalAlignment="Right" Text="{Binding Score}" Width="Auto"/>
+                            </DataTemplate>
+                            <DataTemplate x:Key="NameTemplate">
+                                <TextBlock TextAlignment="Left" Text="{Binding Name}" Width="Auto"/>
+                            </DataTemplate>
+                        </ListView.Resources>
+                        <ListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn CellTemplate="{StaticResource NameTemplate}"/>
+                                    <GridViewColumn CellTemplate="{StaticResource ScoreTemplate}"/>
+                                </GridView.Columns>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
             </Grid>
         </Grid>
         <StatusBar Height="25" VerticalAlignment="Bottom" Background="WhiteSmoke">
+            <StatusBarItem Margin="10,0,25,0">
+                <TextBlock Name="MapName" Text="{Binding SelectedMap}" />
+            </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Name="Coordinates"/>
+                <TextBlock Name="NumberOfRegions" Text="{Binding NumberOfRegions, StringFormat='Number of regions: {0}'}"/>
             </StatusBarItem>
         </StatusBar>
     </Grid>

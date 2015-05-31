@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Maps
 {
-    class Region
+    public class Region
     {
         public string Name
         {
@@ -22,7 +22,7 @@ namespace Maps
 
         public override string ToString()
         {
-            return String.Format("Name: {0}, Color: ({1}, {2}, {3})", this.Name, this.Color.R, this.Color.G, this.Color.B);
+            return Name;
         }
     }
 }

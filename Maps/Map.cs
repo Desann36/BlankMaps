@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Maps
 {
-    class Map
+    public class Map
     {
         public Map(string name, Bitmap map, Bitmap mask, List<Region> regions)
         {
@@ -45,7 +45,6 @@ namespace Maps
         public Point pointInRegion(Color regionColor)
         {
             int col = regionColor.ToArgb();
-            //Bitmap bmp = Mask;
 
             BitmapData data = Mask.LockBits(
                 new Rectangle(0, 0, Mask.Width, Mask.Height),

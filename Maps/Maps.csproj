@@ -54,13 +54,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DistanceMap.cs" />
+    <Compile Include="LoadWindow.xaml.cs">
+      <DependentUpon>LoadWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Map.cs" />
     <Compile Include="MapOperations.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Region.cs" />
     <Compile Include="RegionMap.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="WPFBitmapConverter.cs" />
+    <Page Include="LoadWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -77,11 +90,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -105,16 +113,19 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\slovensko_map.bmp" />
+    <None Include="Resources\slovensko_maskrivers.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\slovensko_mask.bmp" />
+    <None Include="Resources\slovensko_rivers.txt" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\slovensko_regions.txt" />
+    <None Include="Resources\slovensko_map.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\ship2.jpg" />
+    <None Include="Resources\slovensko_regions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\slovensko_mask.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
