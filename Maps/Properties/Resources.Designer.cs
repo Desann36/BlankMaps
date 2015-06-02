@@ -61,36 +61,6 @@ namespace Maps.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap RegionsCSV {
-            get {
-                object obj = ResourceManager.GetObject("RegionsCSV", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap slovensko_map {
-            get {
-                object obj = ResourceManager.GetObject("slovensko_map", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap slovensko_mask {
-            get {
-                object obj = ResourceManager.GetObject("slovensko_mask", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Bratislavský kraj;86;116;185
         ///Trnavský kraj;57;181;74
         ///Nitriansky kraj;237;0;140
@@ -98,11 +68,22 @@ namespace Maps.Properties {
         ///Žilinský kraj;96;57;19
         ///Banskobystrický kraj;247;151;121
         ///Prešovský kraj;255;248;153
-        ///Košický kraj;238;28;36.
+        ///Košický kraj;238;28;36
+        ///.
         /// </summary>
-        internal static string slovensko_regions {
+        internal static string regions {
             get {
-                return ResourceManager.GetString("slovensko_regions", resourceCulture);
+                return ResourceManager.GetString("regions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap RegionsCSV {
+            get {
+                object obj = ResourceManager.GetObject("RegionsCSV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -127,11 +108,32 @@ namespace Maps.Properties {
         ///Laborec;163;98;10
         ///Uh;123;46;0
         ///Latorica;0;255;255
-        ///Bodrog;251;175;93.
+        ///Bodrog;251;175;93
+        ///.
         /// </summary>
-        internal static string slovensko_rivers {
+        internal static string rivers {
             get {
-                return ResourceManager.GetString("slovensko_rivers", resourceCulture);
+                return ResourceManager.GetString("rivers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap slovensko_map {
+            get {
+                object obj = ResourceManager.GetObject("slovensko_map", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap slovensko_mask {
+            get {
+                object obj = ResourceManager.GetObject("slovensko_mask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

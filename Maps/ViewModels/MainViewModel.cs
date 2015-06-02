@@ -21,9 +21,9 @@ namespace Maps.ViewModels
         public MainViewModel()
         {
             var map1 = new RegionMap("Slovensko - kraje", Properties.Resources.slovensko_map,
-                Properties.Resources.slovensko_mask, this.LoadRegions(Properties.Resources.slovensko_regions));
+                Properties.Resources.slovensko_mask, this.LoadRegions(Properties.Resources.regions));
             var map2 = new DistanceMap("Slovensko - rieky", Properties.Resources.sr_rieky_map,
-                Properties.Resources.sr_rieky_mask, this.LoadRegions(Properties.Resources.slovensko_rivers), 413);
+                Properties.Resources.sr_rieky_mask, this.LoadRegions(Properties.Resources.rivers), 413);
             this.MapsCollection = new ObservableCollection<Map>() { map1, map2 };
             this.SelectedMap = this.MapsCollection.ElementAt(0);
         }
@@ -35,7 +35,6 @@ namespace Maps.ViewModels
             var items = lines.Where(line => !String.IsNullOrWhiteSpace(line)).Select(line =>
             {
                 var item = line.Split(';');
-                System.Drawing.Point p = new System.Drawing.Point(Convert.ToInt32(item[1]), Convert.ToInt32(item[2]));
                 Color col = Color.FromArgb(255, Convert.ToInt32(item[1]), Convert.ToInt32(item[2]), Convert.ToInt32(item[3]));
                 return new Region() { Name = item[0], Color = col };
             }).ToList();
