@@ -63,6 +63,16 @@ namespace Maps.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RegionsCSV {
+            get {
+                object obj = ResourceManager.GetObject("RegionsCSV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap slovensko_map {
             get {
                 object obj = ResourceManager.GetObject("slovensko_map", resourceCulture);
@@ -81,19 +91,7 @@ namespace Maps.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap slovensko_maskrivers {
-            get {
-                object obj = ResourceManager.GetObject("slovensko_maskrivers", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Region
-        ///Slovensko - kraje
-        ///Bratislavský kraj;86;116;185
+        ///   Looks up a localized string similar to Bratislavský kraj;86;116;185
         ///Trnavský kraj;57;181;74
         ///Nitriansky kraj;237;0;140
         ///Trenčiansky kraj;0;74;128
@@ -109,13 +107,51 @@ namespace Maps.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Morava;136;0;21
-        ///Dunaj;34;177;76
-        ///Váh;255;201;14.
+        ///   Looks up a localized string similar to Myjava;237;28;36
+        ///Dunaj;0;84;166
+        ///Váh;0;191;243
+        ///Malý dunaj;89;133;39
+        ///Nitra;0;94;32
+        ///Hron;96;92;168
+        ///Kysuca;255;0;255
+        ///Orava;96;57;19
+        ///Turiec;50;0;75
+        ///Ipeľ;199;178;153
+        ///Rimava;237;20;91
+        ///Slaná;115;99;87
+        ///Hornád;255;242;0
+        ///Poprad;133;96;168
+        ///Torysa;121;0;0
+        ///Topľa;0;255;0
+        ///Ondava;171;160;0
+        ///Laborec;163;98;10
+        ///Uh;123;46;0
+        ///Latorica;0;255;255
+        ///Bodrog;251;175;93.
         /// </summary>
         internal static string slovensko_rivers {
             get {
                 return ResourceManager.GetString("slovensko_rivers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sr_rieky_map {
+            get {
+                object obj = ResourceManager.GetObject("sr_rieky_map", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sr_rieky_mask {
+            get {
+                object obj = ResourceManager.GetObject("sr_rieky_mask", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

@@ -1,3 +1,21 @@
-Morava;136;0;21
-Dunaj;34;177;76
-Váh;255;201;14
+Myjava;237;28;36
+Dunaj;0;84;166
+Váh;0;191;243
+Malý dunaj;89;133;39
+Nitra;0;94;32
+Hron;96;92;168
+Kysuca;255;0;255
+Orava;96;57;19
+Turiec;50;0;75
+Ipe¾;199;178;153
+Rimava;237;20;91
+Slaná;115;99;87
+Hornád;255;242;0
+Poprad;133;96;168
+Torysa;121;0;0
+Top¾a;0;255;0
+Ondava;171;160;0
+Laborec;163;98;10
+Uh;123;46;0
+Latorica;0;255;255
+Bodrog;251;175;93

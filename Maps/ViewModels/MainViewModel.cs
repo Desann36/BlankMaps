@@ -7,9 +7,11 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace Maps.ViewModels
@@ -20,8 +22,8 @@ namespace Maps.ViewModels
         {
             var map1 = new RegionMap("Slovensko - kraje", Properties.Resources.slovensko_map,
                 Properties.Resources.slovensko_mask, this.LoadRegions(Properties.Resources.slovensko_regions));
-            var map2 = new DistanceMap("Slovensko - rieky", Properties.Resources.slovensko_map,
-                Properties.Resources.slovensko_maskrivers, this.LoadRegions(Properties.Resources.slovensko_rivers));
+            var map2 = new DistanceMap("Slovensko - rieky", Properties.Resources.sr_rieky_map,
+                Properties.Resources.sr_rieky_mask, this.LoadRegions(Properties.Resources.slovensko_rivers), 413);
             this.MapsCollection = new ObservableCollection<Map>() { map1, map2 };
             this.SelectedMap = this.MapsCollection.ElementAt(0);
         }
@@ -58,13 +60,14 @@ namespace Maps.ViewModels
 
                 GameStarted = false;
                 this.Map = WPFBitmapConverter.ConvertBitmap(SelectedMap.MapToDraw);
-                this.width = SelectedMap.MapToDraw.Width;
-                this.height = SelectedMap.MapToDraw.Height;
+                this.Width = SelectedMap.MapToDraw.Width;
+                this.Height = SelectedMap.MapToDraw.Height;
                 this.NumberOfFoundRegions = 0;
                 this.NumberOfRegions = 0;
                 this.NumberOfRegions = this.SelectedMap.Regions.Count;
                 this.Information = new ObservableCollection<Scoring>();
                 this.RegionToFind = null;
+                this.completeDistance = 0;
 
                 if (this.SelectedMap is DistanceMap)
                 {
@@ -234,6 +237,11 @@ namespace Maps.ViewModels
                 string[] tokens = Size.Split(new string[] { "%" }, StringSplitOptions.None);
                 return (int)(width * Convert.ToDouble(tokens[0]) / 100);
             }
+            set
+            {
+                this.width = value;
+                RaisePropertyChanged("Width");
+            }
         }
 
         private int height;
@@ -243,6 +251,11 @@ namespace Maps.ViewModels
             {
                 string[] tokens = Size.Split(new string[] { "%" }, StringSplitOptions.None);
                 return (int)(height * Convert.ToDouble(tokens[0]) / 100);
+            }
+            set
+            {
+                this.height = value;
+                RaisePropertyChanged("Height");
             }
         }
 
@@ -274,18 +287,20 @@ namespace Maps.ViewModels
             }
         }
 
-        public void MapClicked(System.Drawing.Point p)
+        private double completeDistance;
+
+        public void MapClicked(System.Drawing.Point p, System.Windows.Controls.Image img)
         {
             if (this.SelectedMap == null || this.ItemsToFind == null || GameStarted == false)
             {
                 return;
             }
-            
-            double nx = (double) p.X / this.Width;
-            double ny = (double) p.Y / this.Height;
 
-            int x = (int) (nx * this.Map.Width);
-            int y = (int) (ny * this.Map.Height);
+            double nx = (double)p.X / this.Width;
+            double ny = (double)p.Y / this.Height;
+
+            int x = (int)(nx * this.Map.Width);
+            int y = (int)(ny * this.Map.Height);
 
             Bitmap bmp = WPFBitmapConverter.BitmapFromSource(this.Map);
 
@@ -297,13 +312,25 @@ namespace Maps.ViewModels
                 if (correctness == true)
                 {
                     this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Green));
-                    this.Information.Add(new Scoring() { Name = this.RegionToFind.Name, Score = "✔" });
+                    this.Information.Insert(0, new Scoring() { Name = this.RegionToFind.Name, Score = "✔" });
                 }
                 else if (correctness == false)
                 {
                     System.Drawing.Point point = this.SelectedMap.pointInRegion(this.RegionToFind.Color);
-                    this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Red));
-                    this.Information.Add(new Scoring() { Name = this.RegionToFind.Name, Score = "×" });
+                    BitmapSource animated = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Red));
+                    this.Information.Insert(0, new Scoring() { Name = this.RegionToFind.Name, Score = "×" });
+
+                    img.Visibility = Visibility.Visible;
+                    img.Opacity = 1.0;
+                    img.Source = animated;
+                    DoubleAnimation fadeOut = new DoubleAnimation(0, TimeSpan.FromMilliseconds(750));
+                    fadeOut.Completed += (s, e) =>
+                    {
+                        img.Visibility = Visibility.Collapsed;
+                        DoubleAnimation fadeIn = new DoubleAnimation(1, TimeSpan.FromMilliseconds(0));
+                        img.BeginAnimation(System.Windows.Controls.Image.OpacityProperty, fadeIn);
+                    };
+                    img.BeginAnimation(System.Windows.Controls.Image.OpacityProperty, fadeOut);
                 }
                 else if (correctness == null)
                 {
@@ -313,19 +340,19 @@ namespace Maps.ViewModels
 
             if (this.SelectedMap is DistanceMap)
             {
-                DistanceMap dm = SelectedMap as DistanceMap;
-                double dist = MapOperations.NearestPixel(this.SelectedMap.Mask, new System.Drawing.Point(x, y), this.RegionToFind.Color);
+                var dm = this.SelectedMap as DistanceMap;
+                double pixelDistance = MapOperations.NearestPixel(this.SelectedMap.Mask, new System.Drawing.Point(x, y), this.RegionToFind.Color);
                 this.Map = WPFBitmapConverter.ConvertBitmap(MapOperations.PaintRegion(bmp, SelectedMap.Mask, this.RegionToFind.Color, Color.Green));
-                this.Information.Add(new Scoring() { Name = this.RegionToFind.Name, Score = string.Format("{0:N2}km", dist) });
+                double realDistance = pixelDistance * dm.HorizontalLength / this.Map.Width;
+                this.Information.Insert(0, new Scoring() { Name = this.RegionToFind.Name, Score = string.Format("{0:N2}km", realDistance) });
+                this.completeDistance += realDistance;
             }
 
             RaisePropertyChanged("Information");
             this.ItemsToFind.Remove(this.RegionToFind);
             if (!ItemsToFind.Any())
             {
-                this.ItemsToFind = null;
-                this.GameStarted = false;
-                this.RegionToFind = null;
+                this.TestEnded();
             }
             else
             {
@@ -333,6 +360,34 @@ namespace Maps.ViewModels
                 int regionIndex = rnd.Next(0, this.ItemsToFind.Count);
                 this.RegionToFind = ItemsToFind.ElementAt(regionIndex);
                 this.NumberOfFoundRegions += 1;
+            }
+        }
+
+        private void TestEnded()
+        {
+            this.ItemsToFind = null;
+            this.GameStarted = false;
+            this.RegionToFind = null;
+            int correct = 0;
+
+            if (this.SelectedMap is RegionMap)
+            {
+                foreach (var item in this.Information)
+                {
+                    if (item.Score.Equals("✔"))
+                    {
+                        correct++;
+                    }
+                }
+
+                MessageBox.Show(String.Format("Test completed!{0}Your score: {1} correct out of {2} - {3:N1}%", Environment.NewLine, correct,
+                    this.Information.Count, (double)correct / this.Information.Count * 100),
+                    "Test ended", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show(String.Format("Test completed!{0}Your score: {1:N2}km", Environment.NewLine, this.completeDistance),
+                    "Test ended", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -348,9 +403,10 @@ namespace Maps.ViewModels
         {
             GameStarted = true;
             this.Map = WPFBitmapConverter.ConvertBitmap(SelectedMap.MapToDraw);
-            this.width = SelectedMap.MapToDraw.Width;
-            this.height = SelectedMap.MapToDraw.Height;
+            this.Width = SelectedMap.MapToDraw.Width;
+            this.Height = SelectedMap.MapToDraw.Height;
             this.ItemsToFind = new List<Region>(SelectedMap.Regions);
+            this.completeDistance = 0;
 
             Random rnd = new Random();
             int regionIndex = rnd.Next(0, this.ItemsToFind.Count);
@@ -388,6 +444,34 @@ namespace Maps.ViewModels
             {
                 return new RelayCommand(() => Application.Current.Shutdown());
             }
+        }
+
+        public ICommand NewMapGuide
+        {
+            get
+            {
+                return new RelayCommand(() => this.Guide());
+            }
+        }
+
+        private void Guide()
+        {
+            var nmg = new LoadingGuideWindow();
+            nmg.Show();
+        }
+
+        public ICommand AboutCommand
+        {
+            get
+            {
+                return new RelayCommand(() => this.About());
+            }
+        }
+
+        private void About()
+        {
+            var about = new AboutWindow();
+            about.ShowDialog();
         }
 
         protected void RaisePropertyChanged(string propertyName)

@@ -28,11 +28,11 @@ namespace Maps
 
         private void image1_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            var Image = sender as Image;
+            Image Image = sender as Image;
             var viewModel = Image.DataContext as Maps.ViewModels.MainViewModel;
             Point point = e.GetPosition(Image);
             System.Drawing.Point p = new System.Drawing.Point((int) point.X, (int) point.Y);
-            viewModel.MapClicked(p);
+            viewModel.MapClicked(p, this.image2);
         }
 
         private void Grid_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

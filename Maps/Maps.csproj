@@ -54,7 +54,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DistanceMap.cs" />
+    <Compile Include="LoadingGuideWindow.xaml.cs">
+      <DependentUpon>LoadingGuideWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoadWindow.xaml.cs">
       <DependentUpon>LoadWindow.xaml</DependentUpon>
     </Compile>
@@ -70,6 +76,14 @@
     <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="WPFBitmapConverter.cs" />
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingGuideWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LoadWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,12 +127,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\slovensko_maskrivers.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\slovensko_rivers.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\slovensko_map.bmp" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +134,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\slovensko_mask.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sr_rieky_map.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sr_rieky_mask.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\slovensko_rivers.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RegionsCSV.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
