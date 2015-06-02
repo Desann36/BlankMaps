@@ -13,7 +13,7 @@
                 <MenuItem.Header>
                     <TextBlock Text="File" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </MenuItem.Header>
-                <MenuItem Header="_New" Command="{Binding NewMapCommand}"/>
+                <MenuItem Header="_New..." Command="{Binding NewMapCommand}"/>
                 <Separator />
                 <MenuItem Header="_Exit" Command="{Binding ExitCommand}"/>
             </MenuItem>
@@ -21,8 +21,8 @@
                 <MenuItem.Header>
                     <TextBlock Text="Help" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </MenuItem.Header>
-                <MenuItem Header="User manual" Command="{Binding NewMapGuide}"/>
-                <MenuItem Header="About" Command="{Binding AboutCommand}"/>
+                <MenuItem Header="_User manual..." Command="{Binding NewMapGuide}"/>
+                <MenuItem Header="_About..." Command="{Binding AboutCommand}"/>
             </MenuItem>
         </Menu>
         <Grid Margin="0,26,0,25">
