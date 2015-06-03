@@ -26,6 +26,7 @@ namespace Maps.ViewModels
                 Properties.Resources.sr_rieky_mask, this.LoadRegions(Properties.Resources.rivers), 413);
             this.MapsCollection = new ObservableCollection<Map>() { map1, map2 };
             this.SelectedMap = this.MapsCollection.ElementAt(0);
+            this.Background = WPFBitmapConverter.ConvertBitmap(Properties.Resources.Pozadie);
         }
 
         private List<Region> LoadRegions(string resource_data)
@@ -285,6 +286,8 @@ namespace Maps.ViewModels
                 RaisePropertyChanged("Information");
             }
         }
+
+        public BitmapSource Background { get; set; }
 
         private double completeDistance;
 

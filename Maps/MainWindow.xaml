@@ -33,7 +33,14 @@
             </Grid.ColumnDefinitions>
             <Border  BorderBrush="#FFC5C5C5" BorderThickness="1">
                 <Grid Grid.Column="0">
-
+                    <Grid.Background>
+                        <ImageBrush ImageSource="{Binding Background}" Viewport="0,0,42,40"
+                            ViewportUnits="Absolute"
+                            TileMode="Tile"
+                            Stretch="None"
+                            AlignmentX="Left"
+                            AlignmentY="Top"/>
+                    </Grid.Background>
                     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                         <Grid>
                             <Image Margin="0" Name="image1"  Grid.Column="0" Grid.Row="0" Source="{Binding Map}" Width="{Binding Width}" 

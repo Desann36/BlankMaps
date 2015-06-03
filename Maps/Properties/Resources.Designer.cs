@@ -61,6 +61,16 @@ namespace Maps.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Pozadie {
+            get {
+                object obj = ResourceManager.GetObject("Pozadie", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bratislavský kraj;86;116;185
         ///Trnavský kraj;57;181;74
         ///Nitriansky kraj;237;0;140
