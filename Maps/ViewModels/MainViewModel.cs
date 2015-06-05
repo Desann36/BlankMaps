@@ -5,7 +5,9 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,27 +22,206 @@ namespace Maps.ViewModels
     {
         public MainViewModel()
         {
-            var map1 = new RegionMap("Slovensko - kraje", Properties.Resources.slovensko_map,
-                Properties.Resources.slovensko_mask, this.LoadRegions(Properties.Resources.regions));
-            var map2 = new DistanceMap("Slovensko - rieky", Properties.Resources.sr_rieky_map,
-                Properties.Resources.sr_rieky_mask, this.LoadRegions(Properties.Resources.rivers), 413);
-            this.MapsCollection = new ObservableCollection<Map>() { map1, map2 };
-            this.SelectedMap = this.MapsCollection.ElementAt(0);
+            this.LoadMaps();
             this.Background = WPFBitmapConverter.ConvertBitmap(Properties.Resources.Pozadie);
             this.NewItem = "100%";
+            if (this.MapsCollection.Any())
+            {
+                this.SelectedMap = this.MapsCollection.ElementAt(0);
+            }
         }
 
-        private List<Region> LoadRegions(string resource_data)
-        {
-            List<string> lines = resource_data.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+        public readonly List<string> ImageExtensions = new List<string> { ".JPG", ".JPEG", ".JPE", ".JFIF", 
+            ".BMP", ".DIB", ".GIF", ".PNG", ".TIF", ".TIFF",  };
 
-            var items = lines.Where(line => !String.IsNullOrWhiteSpace(line)).Select(line =>
+        public readonly List<string> TextFilesExtensions = new List<string> { ".TXT", ".CSV" };
+
+        private void LoadMaps()
+        {
+            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var pathData = System.IO.Path.Combine(path, "data");
+
+            if (!Directory.Exists(pathData))
             {
-                var item = line.Split(';');
-                Color col = Color.FromArgb(255, Convert.ToInt32(item[1]), Convert.ToInt32(item[2]), Convert.ToInt32(item[3]));
-                return new Region() { Name = item[0], Color = col };
-            }).ToList();
-            return items;
+                Directory.CreateDirectory(pathData);
+            }
+
+            string[] folders = System.IO.Directory.GetDirectories(pathData);
+
+            foreach (var folder in folders)
+            {
+                var pathString = System.IO.Path.Combine(pathData, folder);
+                string[] files = Directory.GetFiles(pathString);
+
+                String mapType = null;
+                String name = null;
+                Bitmap map = null;
+                Bitmap mask = null;
+                List<Region> regions = null;
+                double horizontalLength = -1;
+
+                foreach (var file in files)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(file);
+
+                    if (ImageExtensions.Contains(Path.GetExtension(file).ToUpperInvariant()))
+                    {
+                        var pom = fileName.Split('_');
+                        var type = pom[pom.Length - 1];
+
+                        if (type.Equals("map"))
+                        {
+                            BitmapSource image = new BitmapImage(new Uri(file, UriKind.Absolute));
+                            map = WPFBitmapConverter.BitmapFromSource(image);
+                        }
+
+                        if (type.Equals("mask"))
+                        {
+                            BitmapSource image = new BitmapImage(new Uri(file, UriKind.Absolute));
+                            mask = WPFBitmapConverter.BitmapFromSource(image);
+                        }
+                    }
+
+                    if (TextFilesExtensions.Contains(Path.GetExtension(file).ToUpperInvariant()))
+                    {
+                        try
+                        {
+                            string[] lines = System.IO.File.ReadAllLines(file, Encoding.Default);
+                        
+                            int skip = 0;
+                            mapType = (lines[0].Split(';'))[0];
+                            name = (lines[1].Split(';'))[0];
+
+                            if (mapType.Equals("Regions"))
+                            {
+                                skip = 2;
+                            }
+
+                            if (mapType.Equals("Distances"))
+                            {
+                                skip = 3;
+                                horizontalLength = Convert.ToDouble((lines[2].Split(';'))[0]);
+                            }
+
+                            regions = lines.Skip(skip).Where(line => !String.IsNullOrWhiteSpace(line)).Select(line =>
+                            {
+                                var item = line.Split(';');
+                                Color col = Color.FromArgb(255, Convert.ToInt32(item[1]), Convert.ToInt32(item[2]), Convert.ToInt32(item[3]));
+                                return new Region() { Name = item[0], Color = col };
+                            }).ToList();
+                        }
+                        catch (System.IO.IOException e)
+                        {
+                            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        catch (FormatException e)
+                        {
+                            MessageBox.Show(e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                        catch (Exception)
+                        {
+                            MessageBox.Show("Map loading problem: wrong format of region file!", "Wrong format", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+
+                if (this.NewMapAttributesCheck(name, map, mask, regions, horizontalLength, mapType))
+                {
+                    if (mapType.Equals("Regions"))
+                    {
+                        var newMap = new RegionMap(name, map, mask, regions);
+                        this.MapsCollection.Add(newMap);
+                    }
+
+                    if (mapType.Equals("Distances"))
+                    {
+                        var newMap = new DistanceMap(name, map, mask, regions, horizontalLength);
+                        this.MapsCollection.Add(newMap);
+                    }
+                }
+            }
+        }
+
+        private bool NewMapAttributesCheck(String name, Bitmap map, Bitmap mask, List<Region> regions, double horizontalLength, string mapType)
+        {
+            if ((name == null || map == null || mask == null || regions == null) || (mapType.Equals("Distances") && horizontalLength <= 0))
+            {
+                MessageBox.Show("Problem with loading a map from data package!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (map.Width != mask.Width || map.Height != mask.Height)
+            {
+                MessageBox.Show("Map loading problem: map and mask dimensions are not identical!", "Map problem", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            
+            if (!this.RegionCheck(new List<Region>(regions), mask))
+            {
+                MessageBox.Show("Map loading problem: mask does not contain all regions!", "Regions problem", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            
+            if (!this.DuplicateRegionColorCheck(new List<Region>(regions)))
+            {
+                MessageBox.Show("Region file contains regions with the same color!", "Regions problem", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+
+        private bool RegionCheck(List<Region> regions, Bitmap mask)
+        {
+            BitmapData data = mask.LockBits(
+               new System.Drawing.Rectangle(0, 0, mask.Width, mask.Height),
+               ImageLockMode.ReadWrite,
+               System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+
+            int[] bits = new int[data.Stride / 4 * data.Height];
+            System.Runtime.InteropServices.Marshal.Copy(data.Scan0, bits, 0, bits.Length);
+
+            for (int y = 0; y < mask.Height; y++)
+            {
+                for (int x = 0; x < mask.Width; x++)
+                {
+                    if (regions.Any() == false)
+                    {
+                        mask.UnlockBits(data);
+                        return true;
+                    }
+
+                    int col = bits[x + y * data.Stride / 4];
+                    for (int i = 0; i < regions.Count; i++)
+                    {
+                        if (regions.ElementAt(i).Color.ToArgb() == col)
+                        {
+                            regions.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            mask.UnlockBits(data);
+
+            if (regions.Any() == false)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool DuplicateRegionColorCheck(List<Region> regions)
+        {
+            var hashset = new HashSet<System.Drawing.Color>();
+            foreach (var region in regions)
+            {
+                if (!hashset.Add(region.Color))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -158,7 +339,7 @@ namespace Maps.ViewModels
             }
         }
 
-        private ObservableCollection<string> items = new ObservableCollection<string>()
+        private readonly ObservableCollection<string> items = new ObservableCollection<string>()
         {
             "500%", "300%", "200%", "150%", "100%", "90%", "75%", "50%", "20%", "10%"
         };
@@ -432,6 +613,7 @@ namespace Maps.ViewModels
 
         private void StartMap()
         {
+            if (SelectedMap == null) return;
             GameStarted = true;
             this.Map = WPFBitmapConverter.ConvertBitmap(SelectedMap.MapToDraw);
             this.Width = SelectedMap.MapToDraw.Width;

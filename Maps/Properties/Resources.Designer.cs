@@ -71,23 +71,6 @@ namespace Maps.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bratislavský kraj;86;116;185
-        ///Trnavský kraj;57;181;74
-        ///Nitriansky kraj;237;0;140
-        ///Trenčiansky kraj;0;74;128
-        ///Žilinský kraj;96;57;19
-        ///Banskobystrický kraj;247;151;121
-        ///Prešovský kraj;255;248;153
-        ///Košický kraj;238;28;36
-        ///.
-        /// </summary>
-        internal static string regions {
-            get {
-                return ResourceManager.GetString("regions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap RegionsCSV {
@@ -98,32 +81,12 @@ namespace Maps.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Myjava;237;28;36
-        ///Dunaj;0;84;166
-        ///Váh;0;191;243
-        ///Malý dunaj;89;133;39
-        ///Nitra;0;94;32
-        ///Hron;96;92;168
-        ///Kysuca;255;0;255
-        ///Orava;96;57;19
-        ///Turiec;50;0;75
-        ///Ipeľ;199;178;153
-        ///Rimava;237;20;91
-        ///Slaná;115;99;87
-        ///Hornád;255;242;0
-        ///Poprad;133;96;168
-        ///Torysa;121;0;0
-        ///Topľa;0;255;0
-        ///Ondava;171;160;0
-        ///Laborec;163;98;10
-        ///Uh;123;46;0
-        ///Latorica;0;255;255
-        ///Bodrog;251;175;93
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static string rivers {
+        internal static System.Drawing.Bitmap RiversCSV {
             get {
-                return ResourceManager.GetString("rivers", resourceCulture);
+                object obj = ResourceManager.GetObject("RiversCSV", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -143,26 +106,6 @@ namespace Maps.Properties {
         internal static System.Drawing.Bitmap slovensko_mask {
             get {
                 object obj = ResourceManager.GetObject("slovensko_mask", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sr_rieky_map {
-            get {
-                object obj = ResourceManager.GetObject("sr_rieky_map", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap sr_rieky_mask {
-            get {
-                object obj = ResourceManager.GetObject("sr_rieky_mask", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

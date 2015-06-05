@@ -164,6 +164,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Maps_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -177,23 +178,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\regions.csv" />
-    <None Include="Resources\rivers.csv" />
-    <None Include="Resources\slovensko_map.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\slovensko_mask.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sr_rieky_map.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\sr_rieky_mask.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\RegionsCSV.bmp" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -214,6 +198,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Pozadie.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RegionsCSV.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\slovensko_map.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\slovensko_mask.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RiversCSV.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

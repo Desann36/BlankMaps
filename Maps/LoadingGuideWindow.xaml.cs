@@ -24,7 +24,8 @@ namespace Maps
             InitializeComponent();
             this.MapExample.Source = WPFBitmapConverter.ConvertBitmap(Properties.Resources.slovensko_map);
             this.MaskExample.Source = WPFBitmapConverter.ConvertBitmap(Properties.Resources.slovensko_mask);
-            this.CSVExample.Source = WPFBitmapConverter.ConvertBitmap(Properties.Resources.RegionsCSV); ;
+            this.CSVExample.Source = WPFBitmapConverter.ConvertBitmap(Properties.Resources.RegionsCSV);
+            this.CSVExample1.Source = WPFBitmapConverter.ConvertBitmap(Properties.Resources.RiversCSV);
         }
     }
 }

@@ -1,18 +1,29 @@
 ﻿<Window x:Class="Maps.LoadingGuideWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="UserManual" Height="585.999" Width="535.999" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="10,11,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="To create a new map, you will need two different images (map and mask) and one CSV file." />
-        <TextBlock HorizontalAlignment="Left" Margin="10,44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Map" FontWeight="Bold" />
-        <TextBlock HorizontalAlignment="Left" Margin="10,63,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Image that will be displayed in the application. For example:" />
-        <Image Name="MapExample" HorizontalAlignment="Left" Height="100" Margin="10,93,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,201,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mask" FontWeight="Bold" />
-        <TextBlock HorizontalAlignment="Left" Margin="10,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Image that contains regions, each region painted with different color. For example:" />
-        <Image Name="MaskExample" HorizontalAlignment="Left" Height="100" Margin="10,251,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,399,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="CSV file" FontWeight="Bold" />
-        <TextBlock HorizontalAlignment="Left" Margin="10,420,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="File containing pairs region name - region color (RGB) (four columns - name | Red | Green | Blue). For example:" />
-        <TextBlock HorizontalAlignment="Left" Margin="10,363,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Dimensions of mask and map must be the same!" Foreground="#FFF10505" />
-        <Image Name="CSVExample" HorizontalAlignment="Left" Height="60" Margin="10,467,0,0" VerticalAlignment="Top"/>
+        Title="UserManual" Height="624.999" Width="829.666" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,4,0">
+        <TextBlock HorizontalAlignment="Left" Margin="24,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="To create a new map (File -> New), you will need two different images&#10;(map and mask) and one CSV file." />
+        <TextBlock HorizontalAlignment="Left" Margin="24,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Map" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="24,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Image that will be displayed in the application. E.g.:" />
+        <Image Name="MapExample" HorizontalAlignment="Left" Height="100" Margin="34,117,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="24,233,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mask" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="24,254,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Image that contains regions, each region painted with different color. E.g.:" Width="371" />
+        <Image Name="MaskExample" HorizontalAlignment="Left" Height="100" Margin="34,294,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="24,433,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="CSV file" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="24,454,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="File containing pairs region name - region color (RGB) (name | Red | Green | Blue). E.g.:" Width="390" />
+        <TextBlock HorizontalAlignment="Left" Margin="24,401,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Dimensions of mask and map must be the same!" Foreground="#FFF10505" />
+        <Image Name="CSVExample" HorizontalAlignment="Left" Height="60" Margin="34,501,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="431,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="To create a data package for a map (in data folder), you will need the same files, but it's necessary to observe following rules:" Width="357" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Map" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Name of an image representing a map must be in form:" />
+        <TextBlock HorizontalAlignment="Left" Margin="454,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="sometext_map" FontStyle="Italic" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mask" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,189,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Name of an image representing a mask must be in form:" />
+        <TextBlock HorizontalAlignment="Left" Margin="454,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="sometext_mask" FontStyle="Italic" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="CSV" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,284,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="The first column of the first row must contain the type of the map (Regions or Distances). The first column of the second row must contain the name of the map. In case the map is a distance map, the third row must contain real horizontal length in kilometres. E.g.:" Width="372" />
+        <Image x:Name="CSVExample1" HorizontalAlignment="Left" Height="110" Margin="442,371,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="431,509,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="All three files must be in separate folder containing only these three files." Width="373" />
     </Grid>
 </Window>
