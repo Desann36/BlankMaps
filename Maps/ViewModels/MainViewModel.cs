@@ -71,14 +71,12 @@ namespace Maps.ViewModels
 
                         if (type.Equals("map"))
                         {
-                            BitmapSource image = new BitmapImage(new Uri(file, UriKind.Absolute));
-                            map = WPFBitmapConverter.BitmapFromSource(image);
+                            map = (Bitmap)Bitmap.FromFile(file);
                         }
 
                         if (type.Equals("mask"))
                         {
-                            BitmapSource image = new BitmapImage(new Uri(file, UriKind.Absolute));
-                            mask = WPFBitmapConverter.BitmapFromSource(image);
+                            mask = (Bitmap)Bitmap.FromFile(file);
                         }
                     }
 
@@ -87,28 +85,29 @@ namespace Maps.ViewModels
                         try
                         {
                             string[] lines = System.IO.File.ReadAllLines(file, Encoding.Default);
-                        
-                            int skip = 0;
-                            mapType = (lines[0].Split(';'))[0];
-                            name = (lines[1].Split(';'))[0];
 
-                            if (mapType.Equals("Regions"))
+                            var line1 = (lines[0].Split(';'))[0];
+
+                            if (line1.Equals("Regions"))
                             {
-                                skip = 2;
+                                mapType = (lines[0].Split(';'))[0];
+                                name = (lines[1].Split(';'))[0];
                             }
-
-                            if (mapType.Equals("Distances"))
+                            else if (line1.Equals("Distances"))
                             {
-                                skip = 3;
+                                mapType = (lines[0].Split(';'))[0];
+                                name = (lines[1].Split(';'))[0];
                                 horizontalLength = Convert.ToDouble((lines[2].Split(';'))[0]);
                             }
-
-                            regions = lines.Skip(skip).Where(line => !String.IsNullOrWhiteSpace(line)).Select(line =>
+                            else
                             {
-                                var item = line.Split(';');
-                                Color col = Color.FromArgb(255, Convert.ToInt32(item[1]), Convert.ToInt32(item[2]), Convert.ToInt32(item[3]));
-                                return new Region() { Name = item[0], Color = col };
-                            }).ToList();
+                                regions = lines.Where(line => !String.IsNullOrWhiteSpace(line)).Select(line =>
+                                {
+                                    var item = line.Split(';');
+                                    Color col = Color.FromArgb(255, Convert.ToInt32(item[1]), Convert.ToInt32(item[2]), Convert.ToInt32(item[3]));
+                                    return new Region() { Name = item[0], Color = col };
+                                }).ToList();
+                            }
                         }
                         catch (System.IO.IOException e)
                         {
@@ -191,6 +190,7 @@ namespace Maps.ViewModels
                     }
 
                     int col = bits[x + y * data.Stride / 4];
+
                     for (int i = 0; i < regions.Count; i++)
                     {
                         if (regions.ElementAt(i).Color.ToArgb() == col)
@@ -203,6 +203,11 @@ namespace Maps.ViewModels
             }
 
             mask.UnlockBits(data);
+
+            foreach (var item in regions)
+            {
+                Console.WriteLine(item);
+            }
 
             if (regions.Any() == false)
             {

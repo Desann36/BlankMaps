@@ -14,16 +14,16 @@
         <TextBlock HorizontalAlignment="Left" Margin="24,454,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="File containing pairs region name - region color (RGB) (name | Red | Green | Blue). E.g.:" Width="390" />
         <TextBlock HorizontalAlignment="Left" Margin="24,401,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Dimensions of mask and map must be the same!" Foreground="#FFF10505" />
         <Image Name="CSVExample" HorizontalAlignment="Left" Height="60" Margin="34,501,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="431,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="To create a data package for a map (in data folder), you will need the same files, but it's necessary to observe following rules:" Width="357" />
-        <TextBlock HorizontalAlignment="Left" Margin="432,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Map" FontWeight="Bold" />
-        <TextBlock HorizontalAlignment="Left" Margin="432,90,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Name of an image representing a map must be in form:" />
-        <TextBlock HorizontalAlignment="Left" Margin="454,123,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="sometext_map" FontStyle="Italic" />
-        <TextBlock HorizontalAlignment="Left" Margin="432,168,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mask" FontWeight="Bold" />
-        <TextBlock HorizontalAlignment="Left" Margin="432,189,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Name of an image representing a mask must be in form:" />
-        <TextBlock HorizontalAlignment="Left" Margin="454,220,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="sometext_mask" FontStyle="Italic" />
-        <TextBlock HorizontalAlignment="Left" Margin="432,260,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="CSV" FontWeight="Bold" />
-        <TextBlock HorizontalAlignment="Left" Margin="432,284,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="The first column of the first row must contain the type of the map (Regions or Distances). The first column of the second row must contain the name of the map. In case the map is a distance map, the third row must contain real horizontal length in kilometres. E.g.:" Width="372" />
-        <Image x:Name="CSVExample1" HorizontalAlignment="Left" Height="110" Margin="442,371,0,0" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="431,509,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="All three files must be in separate folder containing only these three files." Width="373" />
+        <TextBlock HorizontalAlignment="Left" Margin="431,19,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="To create a data package for a map (in data folder), you will need the same files plus one extra csv file and it's necessary to observe following rules:" Width="357" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,89,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Map" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,108,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Name of an image representing a map must be in form:" />
+        <TextBlock HorizontalAlignment="Left" Margin="454,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="sometext_map" FontStyle="Italic" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,186,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Mask" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Name of an image representing a mask must be in form:" />
+        <TextBlock HorizontalAlignment="Left" Margin="454,238,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="sometext_mask" FontStyle="Italic" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,278,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Extra CSV" FontWeight="Bold" />
+        <TextBlock HorizontalAlignment="Left" Margin="432,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="The first column of the first row must contain the type of the map (Regions or Distances). The first column of the second row must contain the name of the map. In case the map is a distance map, the third row must contain real horizontal length in kilometres. E.g.:" Width="372" />
+        <Image x:Name="CSVExample1" HorizontalAlignment="Left" Height="65" Margin="442,393,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="431,492,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="All four files must be in separate folder containing only these three files." Width="373" />
     </Grid>
 </Window>
